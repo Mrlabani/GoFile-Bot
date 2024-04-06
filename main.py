@@ -10,9 +10,9 @@ load_dotenv()
 
 Bot = Client(
     "GoFile-Bot",
-    bot_token=os.environ.get("7109933749:AAECk_lZQ5T7D76s3owaRORtGeM7KDFPKG4"),
-    api_id=int(os.environ.get("24903318")),
-    api_hash=os.environ.get("266a897e11f3872392f16a43e226c902")
+    bot_token=os.environ.get("BOT_TOKEN","7109933749:AAECk_lZQ5T7D76s3owaRORtGeM7KDFPKG4"),
+    api_id=int(os.environ.get("API_ID","24903318")),
+    api_hash=os.environ.get("API_HASH","266a897e11f3872392f16a43e226c902")
 )
 
 INSTRUCTIONS = """
@@ -99,7 +99,7 @@ async def filter(bot, update):
         await message.edit_text("`Uploading Successfully`")
 
         try:
-            os.remove(media)
+            os.remove(file)
         except Exception as error:
             print(error)
 
@@ -108,15 +108,18 @@ async def filter(bot, update):
         return
 
     text = f"**File Name:** `{response['fileName']}`" + "\n"
-    text += f"**Download Page:** `{response['downloadPage']}`" + "\n"
-    text += f"**Direct Download Link:** `{response['directLink']}`" + "\n"
+    text += f"**File ID:** `{response['fileId']}`" + "\n"
+    text += f"**Code:** `{response['code']}`" + "\n"
+    text += f"**md5:** `{response['md5']}`" + "\n"
+    text += f"**Download Page:** `{response['downloadPage']}`"
+    link = response['downloadPage']
     reply_markup = InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    text="Open Link", url=response['directLink']),
+                    text="Open Link", url=link),
                 InlineKeyboardButton(
-                    text="Share Link", url=f"https://telegram.me/share/url?url={response['directLink']}")
+                    text="Share Link", url=f"https://telegram.me/share/url?url={link}")
             ],
             [
                 InlineKeyboardButton(
